@@ -6,6 +6,7 @@ from re import compile
 from threading import Thread, currentThread, Event
 from pika.exceptions import ChannelClosed, ConnectionClosed, StreamLostError
 from kafka.errors import KafkaError
+from copy import deepcopy
 import json
 
 
@@ -76,7 +77,7 @@ class Worker(Thread):
                         try:
                             msgjson = json.loads(consumerRecord.value.decode())
                             values = msgjson['values']
-                            output = device['ditto_message']
+                            output = deepcopy(device['ditto_message'])
                             value = output['value']
                             addValuesToOutputMessage(value, values, pattern)
                             output['value'] = value
